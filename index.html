@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Random Candy</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍬</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Playfair+Display:ital,wght@1,900&family=Racing+Sans+One&display=swap" rel="stylesheet">
 <style>
   html, body {
     margin: 0;
@@ -13,27 +17,42 @@
     overflow: hidden;
     background: #000;
     font-family: "Impact", "Arial Black", sans-serif;
+    -webkit-text-size-adjust: 100%;
   }
 
   .stage {
     position: fixed;
-    inset: 0;
-    display: flex;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    display: none;
     align-items: center;
     justify-content: center;
     background: #000;
+    box-sizing: border-box;
+  }
+
+  body.mode-bouchon .stage-bouchon { display: flex; }
+  body.mode-karts   .stage-karts   { display: flex; }
+  body.mode-punch   .stage-punch   { display: flex; }
+
+  /* ---------- Bouchon strobe ---------- */
+  .stage-bouchon {
     animation: strobe 700ms step-end infinite;
   }
 
-  .text {
-    font-size: clamp(3rem, 12vw, 12rem);
+  .bouchon-text {
+    font-size: clamp(2.5rem, 13vw, 12rem);
     font-weight: 900;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.03em;
     text-align: center;
-    line-height: 1;
+    line-height: 1.05;
     text-transform: uppercase;
     color: #fff;
     user-select: none;
+    padding: 0 4vw;
   }
 
   @keyframes strobe {
@@ -43,16 +62,342 @@
     100% { filter: invert(1); }
   }
 
+  /* ---------- Caviar & Go Karts ---------- */
+  .stage-karts {
+    background: #051d10;
+    overflow: hidden;
+    flex-direction: column;
+    gap: 2vh;
+    position: relative;
+  }
+
+  /* Full-bleed animated checkered pattern */
+  .stage-karts::before {
+    content: "";
+    position: absolute;
+    top: -10vmax;
+    bottom: -10vmax;
+    left: -10vmax;
+    right: -10vmax;
+    background:
+      repeating-conic-gradient(#000 0 25%, #fff 0 50%) 0 0 / 80px 80px;
+    opacity: 0.11;
+    animation: race 4s linear infinite;
+    pointer-events: none;
+  }
+
+  /* Vignette on top of checker for text contrast */
+  .stage-karts::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at center,
+        rgba(5, 29, 16, 0) 0%,
+        rgba(5, 29, 16, 0.35) 55%,
+        rgba(5, 29, 16, 0.85) 100%);
+    pointer-events: none;
+  }
+
+  .stage-karts > * { position: relative; z-index: 1; }
+
+  @keyframes race {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-80px); }
+  }
+
+  .karts-title {
+    position: relative;
+    text-align: center;
+    line-height: 0.95;
+    user-select: none;
+    animation: rev 1.6s ease-in-out infinite;
+  }
+
+  @keyframes rev {
+    0%, 100% { transform: scale(1)   translateX(0); }
+    45%      { transform: scale(1.015) translateX(-2px); }
+    50%      { transform: scale(1.02)  translateX(2px); }
+    55%      { transform: scale(1.015) translateX(-1px); }
+  }
+
+  .caviar {
+    display: block;
+    font-family: "Playfair Display", "Didot", "Bodoni MT", serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(2.75rem, 15vw, 13rem);
+    color: transparent;
+    background: linear-gradient(180deg, #f7d774 0%, #b8860b 55%, #f7d774 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(247, 215, 116, 0.25);
+    letter-spacing: -0.01em;
+  }
+
+  .amp {
+    display: block;
+    font-family: "Playfair Display", serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.75rem, 7vw, 6rem);
+    color: #f7d774;
+    opacity: 0.8;
+    margin: -0.15em 0;
+  }
+
+  .karts {
+    display: block;
+    font-family: "Racing Sans One", "Impact", "Arial Black", sans-serif;
+    font-size: clamp(2.75rem, 16vw, 14rem);
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    text-shadow:
+      3px 0 0 #d90429,
+      6px 0 0 rgba(217, 4, 41, 0.5),
+      0 4px 20px rgba(0,0,0,0.6);
+  }
+
+  .location {
+    position: relative;
+    font-family: "Racing Sans One", "Impact", sans-serif;
+    font-size: clamp(0.95rem, 3.2vw, 2.5rem);
+    color: #f7d774;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-top: 1vh;
+    padding: 0 4vw;
+  }
+
+  .location .flag {
+    display: inline-block;
+    margin: 0 0.4em;
+    animation: wave 0.9s ease-in-out infinite;
+  }
+  .location .flag:last-child { animation-delay: 0.15s; }
+
+  @keyframes wave {
+    0%, 100% { transform: rotate(-8deg); }
+    50%      { transform: rotate(8deg); }
+  }
+
+  /* ---------- Full Punch Bowl ---------- */
+  .stage-punch {
+    background: radial-gradient(ellipse at 50% 40%,
+      #ffe28a 0%,
+      #ff9a3c 45%,
+      #ff5a5f 100%);
+    overflow: hidden;
+    position: relative;
+    flex-direction: column;
+  }
+
+  /* Tiled orange slices as background pattern */
+  .stage-punch::before {
+    content: "";
+    position: absolute;
+    top: -12vmax;
+    bottom: -12vmax;
+    left: -12vmax;
+    right: -12vmax;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%23ff7a1a' stroke='%23a63c00' stroke-width='3'/><circle cx='50' cy='50' r='40' fill='%23ffcb6b'/><g stroke='%23ff7a1a' stroke-width='3' stroke-linecap='round' fill='none'><line x1='50' y1='11' x2='50' y2='89'/><line x1='11' y1='50' x2='89' y2='50'/><line x1='22' y1='22' x2='78' y2='78'/><line x1='78' y1='22' x2='22' y2='78'/></g><circle cx='50' cy='50' r='6' fill='%23fff5d6' stroke='%23ff7a1a' stroke-width='1.5'/></svg>");
+    background-size: 130px 130px;
+    background-repeat: repeat;
+    opacity: 0.85;
+    animation: drift 14s linear infinite;
+    pointer-events: none;
+    transform: rotate(-6deg);
+    transform-origin: center;
+  }
+
+  @keyframes drift {
+    from { background-position: 0 0; }
+    to   { background-position: 260px 130px; }
+  }
+
+  /* Subtle warm vignette so text pops */
+  .stage-punch::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center,
+      rgba(255, 200, 100, 0) 0%,
+      rgba(220, 60, 40, 0.25) 70%,
+      rgba(120, 30, 20, 0.55) 100%);
+    pointer-events: none;
+  }
+
+  .stage-punch > * { position: relative; z-index: 1; }
+
+  .punch-title {
+    font-family: "Bagel Fat One", "Fugaz One", "Impact", "Arial Black", sans-serif;
+    font-size: clamp(3rem, 15vw, 13rem);
+    line-height: 0.9;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    padding: 0 4vw;
+    user-select: none;
+    text-shadow:
+      -2px 2px 0 #b8003a,
+      -4px 4px 0 #7a0026,
+      -6px 6px 0 rgba(0, 0, 0, 0.15),
+      0 0 40px rgba(255, 90, 95, 0.6);
+    transform: rotate(-2deg);
+  }
+
+  .punch-title .word {
+    display: inline-block;
+    padding: 0 0.15em;
+    animation: wobble 1.5s ease-in-out infinite;
+  }
+  .punch-title .word:nth-child(1) { animation-delay: 0s; }
+  .punch-title .word:nth-child(2) { animation-delay: 0.18s; }
+  .punch-title .word:nth-child(3) { animation-delay: 0.36s; }
+
+  @keyframes wobble {
+    0%, 100% { transform: translateY(0)    rotate(-2deg); }
+    50%      { transform: translateY(-14px) rotate(3deg); }
+  }
+
+  .punch-emoji {
+    font-size: clamp(2rem, 8vw, 6rem);
+    line-height: 1;
+    margin-top: 1vh;
+    animation: sway 2.2s ease-in-out infinite;
+    user-select: none;
+  }
+  .punch-emoji .e {
+    display: inline-block;
+    margin: 0 0.15em;
+  }
+  .punch-emoji .e:nth-child(1) { animation: bob 2s ease-in-out infinite;         animation-delay: 0s; }
+  .punch-emoji .e:nth-child(2) { animation: bob 2s ease-in-out 0.3s infinite; }
+  .punch-emoji .e:nth-child(3) { animation: bob 2s ease-in-out 0.6s infinite; }
+
+  @keyframes sway {
+    0%, 100% { transform: rotate(-3deg); }
+    50%      { transform: rotate(3deg); }
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+  }
+
+  /* ---------- Toggle ---------- */
+  .toggle {
+    position: fixed;
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    right: calc(20px + env(safe-area-inset-right));
+    z-index: 10;
+    background: rgba(255,255,255,0.14);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.4);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 12px 20px;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.15s ease, background 0.15s ease;
+    mix-blend-mode: difference;
+  }
+  .toggle:hover { background: rgba(255,255,255,0.22); transform: translateY(-1px); }
+  .toggle:active { transform: translateY(0); }
+
+  /* Small screens */
+  @media (max-width: 500px) {
+    .stage-karts { gap: 0.5vh; }
+    .amp { margin: -0.2em 0; }
+    .toggle {
+      padding: 16px 24px;
+      font-size: 15px;
+      min-height: 48px;
+      min-width: 100px;
+      bottom: calc(24px + env(safe-area-inset-bottom));
+      right: calc(16px + env(safe-area-inset-right));
+    }
+  }
+
+  /* Short viewports (landscape phones) */
+  @media (max-height: 500px) {
+    .caviar { font-size: clamp(2rem, 10vh, 6rem); }
+    .amp    { font-size: clamp(1.25rem, 5vh, 3rem); }
+    .karts  { font-size: clamp(2rem, 11vh, 6rem); }
+    .location { font-size: clamp(0.8rem, 3vh, 1.5rem); }
+    .bouchon-text { font-size: clamp(2rem, 14vh, 8rem); }
+    .punch-title { font-size: clamp(2rem, 14vh, 8rem); }
+    .punch-emoji { font-size: clamp(1.5rem, 6vh, 4rem); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .stage {
+    .stage-bouchon,
+    .stage-karts::before,
+    .stage-punch::before,
+    .karts-title,
+    .location .flag,
+    .punch-title .word,
+    .punch-emoji,
+    .punch-emoji .e {
       animation: none;
     }
   }
 </style>
 </head>
 <body>
-  <div class="stage">
-    <div class="text">Le Bouchon<br>(Or Rootstock)<br>August 10</div>
+  <div class="stage stage-bouchon">
+    <div class="bouchon-text">Le Bouchon<br>(Or Rootstock)<br>August 10</div>
   </div>
+
+  <div class="stage stage-karts">
+    <div class="karts-title">
+      <span class="caviar">Caviar</span>
+      <span class="amp">&amp;</span>
+      <span class="karts">Go Karts</span>
+    </div>
+    <div class="location">
+      <span class="flag">🏁</span>Grand Haven<span class="flag">🏁</span>
+    </div>
+  </div>
+
+  <div class="stage stage-punch">
+    <div class="punch-title">
+      <span class="word">Full</span>
+      <span class="word">Punch</span>
+      <span class="word">Bowl</span>
+    </div>
+    <div class="punch-emoji">
+      <span class="e">🍊</span><span class="e">🍹</span><span class="e">🍊</span>
+    </div>
+  </div>
+
+  <button class="toggle" type="button">Switch</button>
+
+  <script>
+    (function () {
+      var body = document.body;
+      var modes = ['mode-bouchon', 'mode-karts', 'mode-punch'];
+      body.classList.add(modes[Math.floor(Math.random() * modes.length)]);
+
+      document.querySelector('.toggle').addEventListener('click', function () {
+        for (var i = 0; i < modes.length; i++) {
+          if (body.classList.contains(modes[i])) {
+            body.classList.remove(modes[i]);
+            body.classList.add(modes[(i + 1) % modes.length]);
+            return;
+          }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
