@@ -20,7 +20,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: strobeBg 150ms steps(2, end) infinite;
+    background: #000;
+    animation: strobe 700ms step-end infinite;
   }
 
   .text {
@@ -30,29 +31,21 @@
     text-align: center;
     line-height: 1;
     text-transform: uppercase;
-    animation: strobeText 150ms steps(2, end) infinite;
+    color: #fff;
     user-select: none;
   }
 
-  @keyframes strobeBg {
-    0%   { background: #000; }
-    50%  { background: #fff; }
-    100% { background: #000; }
-  }
-
-  @keyframes strobeText {
-    0%   { color: #fff; opacity: 1; }
-    49%  { color: #fff; opacity: 1; }
-    50%  { color: #000; opacity: 1; }
-    100% { color: #000; opacity: 1; }
+  @keyframes strobe {
+    0%   { filter: none; }
+    80%  { filter: none; }
+    80.001% { filter: invert(1); }
+    100% { filter: invert(1); }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .stage, .text {
+    .stage {
       animation: none;
     }
-    .stage { background: #000; }
-    .text { color: #fff; }
   }
 </style>
 </head>
