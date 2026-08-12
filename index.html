@@ -34,32 +34,52 @@
     box-sizing: border-box;
   }
 
-  body.mode-bouchon .stage-bouchon { display: flex; }
+  body.mode-weber .stage-weber { display: flex; }
   body.mode-karts   .stage-karts   { display: flex; }
   body.mode-punch   .stage-punch   { display: flex; }
 
-  /* ---------- Bouchon strobe ---------- */
-  .stage-bouchon {
-    animation: strobe 700ms step-end infinite;
+  /* ---------- Organizational Announcement ---------- */
+  .stage-weber {
+    background: #fff;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .bouchon-text {
-    font-size: clamp(2.5rem, 13vw, 12rem);
-    font-weight: 900;
-    letter-spacing: 0.03em;
-    text-align: center;
-    line-height: 1.05;
-    text-transform: uppercase;
-    color: #fff;
+  /* Wrapper so the sticker anchors to the announcement, not the viewport */
+  .weber-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    flex: 0 0 auto;
+  }
+
+  .weber-img {
+    display: block;
+    width: 100%;
+    height: auto;
     user-select: none;
-    padding: 0 4vw;
   }
 
-  @keyframes strobe {
-    0%   { filter: none; }
-    80%  { filter: none; }
-    80.001% { filter: invert(1); }
-    100% { filter: invert(1); }
+  .weber-sticker {
+    position: absolute;
+    top: 55%;
+    right: 1%;
+    width: 30%;
+    height: auto;
+    user-select: none;
+    pointer-events: none;
+    transform: rotate(-10deg);
+    transform-origin: center;
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.28));
+    animation: pop 2.4s ease-in-out infinite;
+  }
+
+  @keyframes pop {
+    0%, 100% { transform: rotate(-10deg) scale(1); }
+    50%      { transform: rotate(-6deg)  scale(1.06); }
   }
 
   /* ---------- Caviar & Go Karts ---------- */
@@ -334,13 +354,12 @@
     .amp    { font-size: clamp(1.25rem, 5vh, 3rem); }
     .karts  { font-size: clamp(2rem, 11vh, 6rem); }
     .location { font-size: clamp(0.8rem, 3vh, 1.5rem); }
-    .bouchon-text { font-size: clamp(2rem, 14vh, 8rem); }
     .punch-title { font-size: clamp(2rem, 14vh, 8rem); }
     .punch-emoji { font-size: clamp(1.5rem, 6vh, 4rem); }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .stage-bouchon,
+    .weber-sticker,
     .stage-karts::before,
     .stage-punch::before,
     .karts-title,
@@ -354,8 +373,12 @@
 </style>
 </head>
 <body>
-  <div class="stage stage-bouchon">
-    <div class="bouchon-text">Le Bouchon<br>(Or Rootstock)<br>August 10</div>
+  <div class="stage stage-weber">
+    <div class="weber-wrap">
+      <img class="weber-img" src="michael-weber.jpeg"
+           alt="Global Total Rewards organizational announcement: Michael Weber appointed Head of HR Global Acquisitions &amp; Divestitures">
+      <img class="weber-sticker" src="wow-sticker.png" alt="Wow!">
+    </div>
   </div>
 
   <div class="stage stage-karts">
@@ -385,7 +408,7 @@
   <script>
     (function () {
       var body = document.body;
-      var modes = ['mode-bouchon', 'mode-karts', 'mode-punch'];
+      var modes = ['mode-weber', 'mode-karts', 'mode-punch'];
       body.classList.add(modes[Math.floor(Math.random() * modes.length)]);
 
       document.querySelector('.toggle').addEventListener('click', function () {
